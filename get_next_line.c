@@ -14,53 +14,37 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <stdlib.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
-	char		buffer[4];
-	int			bytes_read;
-	int			i;
-	static char	stash[5000];
+	char		*buffer;
+	static char	stash[2000000];
 	static int	len = 0;
-	char		*line;
+	ssize_t		index;
 
+	buffer = malloc(BUFFER_SIZE);
+	if (!buffer)
+		return (NULL);
 	while (1)
 	{
-		i = 0;
-		while (i < len && stash[i] != '\n')
-			i++;
-		if (i < len)
+		index = ft_find_newline(stash, len);
+		if (index != -1)
 		{
-			line = ft_leftover(stash, &len, i);
-			return (line);
+			free(buffer);
+			return (ft_extract_line(stash, &len, index));
 		}
-		bytes_read = read(fd, buffer, sizeof(buffer));
-		if (bytes_read <= 0)
+		index = read(fd, buffer, BUFFER_SIZE);
+		if (index <= 0)
 		{
-			if (len > 0)
-			{
-				line = malloc(len + 1);
-				if (!line)
-					return (NULL);
-				ft_memmove(line, stash, len);
-				line[len] = '\0';
-				len = 0;
-				ft_putstr(line);
-				return (line);
-			}
-			return (NULL);
+			free(buffer);
+			return (ft_clean_stash(stash, &len));
 		}
-		i = 0;
-		while (i < bytes_read)
-		{
-			stash[len] = buffer[i];
-			len++;
-			i++;
-		}
+		ft_add_to_stash(stash, buffer, &len, index);
 	}
 }
-
+/*
 int	main(int argc, char **argv)
 {
 	int		fd;
@@ -71,7 +55,7 @@ int	main(int argc, char **argv)
 		fd = open(argv[1], O_RDONLY);
 		if (fd == -1)
 		{
-			ft_putstr("Cannot read file.\n");
+			printf("Cannot read file.\n");
 			return (1);
 		}
 		line = get_next_line(fd);
@@ -84,13 +68,13 @@ int	main(int argc, char **argv)
 	}
 	else if (argc > 2)
 	{
-		ft_putstr("Too many arguments.\n");
+		printf("Too many arguments.\n");
 		return (1);
 	}
 	else
 	{
-		ft_putstr("File name missing.\n");
+		printf("File name missing.\n");
 		return (1);
 	}
 	return (0);
-}
+}*/
