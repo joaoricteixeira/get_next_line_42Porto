@@ -10,4 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
+#include <stddef.h>
+
+void	ft_putstr(char *str);
+void	*ft_memmove(void *dest_str, const void *src_str, size_t n);
+char	*ft_leftover(char *stash, int *len, int i);
+
+#endif

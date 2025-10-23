@@ -1,41 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joateixe <joateixe@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/22 15:31:33 by joateixe          #+#    #+#             */
+/*   Updated: 2025/10/22 15:32:23 by joateixe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line.h"
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <stdlib.h>
-
-void	ft_putstr(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		write(1, &str[i++], 1);
-}
-
-void	*ft_memmove(void *dest_str, const void *src_str, size_t n)
-{
-	unsigned char		*dest;
-	const unsigned char	*src;
-
-	dest = (unsigned char *)dest_str;
-	src = (const unsigned char *)src_str;
-	if (dest < src)
-	{
-		while (n--)
-			*dest++ = *src++;
-	}
-	else
-	{
-		dest += n;
-		src += n;
-		while (n--)
-		{
-			*(--dest) = *(--src);
-		}
-	}
-	return (dest_str);
-}
-
 
 char	*get_next_line(int fd)
 {
@@ -45,7 +24,6 @@ char	*get_next_line(int fd)
 	static char	stash[5000];
 	static int	len = 0;
 	char		*line;
-	int			new_len;
 
 	while (1)
 	{
@@ -54,15 +32,7 @@ char	*get_next_line(int fd)
 			i++;
 		if (i < len)
 		{
-			line = malloc(i + 2);
-			if (!line)
-				return (NULL);
-			ft_memmove(line, stash, i + 1);
-			line[i + 1] = '\0';
-			new_len = len - (i + 1);
-			ft_memmove(stash, stash + i + 1, new_len);
-			len = new_len;
-			ft_putstr(line);
+			line = ft_leftover(stash, &len, i);
 			return (line);
 		}
 		bytes_read = read(fd, buffer, sizeof(buffer));
