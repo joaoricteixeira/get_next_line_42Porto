@@ -49,21 +49,22 @@ int	ft_find_newline(const char *stash, int len)
 	return (-1);
 }
 
-char	*ft_extract_line(char *stash, int *len, int nl)
+char	*ft_extract_line(char *stash, int *len, int index)
 {
 	char	*line;
-	int		remain;
+	int		line_len;
+	int		remaining;
 
-	if (nl < 0 || *len <= 0 || nl >= *len)
-		return (NULL);
-	remain = *len - (nl + 1);
-	line = malloc(nl + 2);
+	line_len = index + 1;
+	remaining = *len - line_len;
+	line = malloc(line_len + 1);
 	if (!line)
 		return (NULL);
-	ft_memmove(line, stash, nl + 1);
-	line[nl + 1] = '\0';
-	ft_memmove(stash, stash + nl + 1, remain);
-	*len = remain;
+	ft_memmove(line, stash, line_len);
+	line[line_len] = '\0';
+	ft_memmove(stash, stash + line_len, remaining);
+	*len = remaining;
+	stash[*len] = '\0';
 	return (line);
 }
 
@@ -79,11 +80,13 @@ char	*ft_clean_stash(char *stash, int *len)
 	ft_memmove(line, stash, *len);
 	line[*len] = '\0';
 	*len = 0;
+	stash[0] = '\0';
 	return (line);
 }
 
 void	ft_add_to_stash(char *stash, const char *buffer, int *len, size_t bytes)
 {
-	while (bytes--)
-		stash[(*len)++] = *buffer++;
+	ft_memmove(stash + *len, buffer, bytes);
+	*len += bytes;
+	stash[*len] = '\0';
 }

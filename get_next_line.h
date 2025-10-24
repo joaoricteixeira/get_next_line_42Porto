@@ -23,7 +23,7 @@
 char	*get_next_line(int fd);
 void	*ft_memmove(void *dest_str, const void *src_str, size_t n);
 int		ft_find_newline(const char *stash, int len);
-char	*ft_extract_line(char *stash, int *len, int nl);
+char	*ft_extract_line(char *stash, int *len, int index);
 char	*ft_clean_stash(char *stash, int *len);
 void	ft_add_to_stash(char *stash, const char *buffer,
 			int *len, size_t bytes);
