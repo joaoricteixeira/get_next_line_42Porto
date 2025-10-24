@@ -44,8 +44,11 @@ int	ft_find_newline(const char *stash, int len)
 
 	i = 0;
 	while (i < len)
-		if (stash[i++] == '\n')
-			return (i - 1);
+	{
+		if (stash[i] == '\n')
+			return (i);
+		i++;
+	}
 	return (-1);
 }
 
