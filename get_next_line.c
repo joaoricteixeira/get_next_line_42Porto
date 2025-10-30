@@ -6,7 +6,7 @@
 /*   By: joateixe <joateixe@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 15:31:33 by joateixe          #+#    #+#             */
-/*   Updated: 2025/10/22 15:32:23 by joateixe         ###   ########.fr       */
+/*   Updated: 2025/10/24 23:27:54 by joateixe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 char	*ft_handle_eof_or_error(ssize_t bytes, char *stash, int *len)
 {
-	if (bytes == -1)
+	if (bytes < 0)
 	{
 		*len = 0;
 		stash[0] = '\0';
@@ -51,7 +51,8 @@ char	*get_next_line(int fd)
 		ft_add_to_stash(stash, buffer, &len, bytes);
 	}
 }
-/*
+
+#include <stdio.h>
 int	main(int argc, char **argv)
 {
 	int		fd;
@@ -84,4 +85,4 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	return (0);
-}*/
+}
